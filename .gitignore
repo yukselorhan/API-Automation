@@ -1,0 +1,21 @@
+# virtual environments
+py2venv/
+py3venv/
+venv/
+
+# PyCharm
+.idea/
+
+# python
+*.pyc
+
+# pytest
+.pytest_cache/
+
+# test log files
+*.log
+
+# robot framework
+log.html
+output.xml
+report.html
