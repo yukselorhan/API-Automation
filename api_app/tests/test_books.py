@@ -12,28 +12,29 @@ from api_app.src.data import BOOKS
 
 @pytest.fixture
 def client():
-    return testing.TestClient(app.api)
+    return testing.TestClient(app.api) #test clientı oluşturuyoruz api calları simule etmek için 
 
 def test_get_books(client):
     expected = list(BOOKS)
 
-    response = client.simulate_get('/books')
+    response = client.simulate_get('/books') #books uzantısında get requesti simule ediyor
 
-    assert response.status == falcon.HTTP_OK
-    assert response.json == expected
+    assert response.status == falcon.HTTP_OK  
+    assert response.json == expected  #dönen sonuç ile beklediğimi sonuçu kontrol ediyor, beklediğim sonuç dataki books
+    assert len(response.json) == 0 #hiç kitap olmadıgını kontrol ediyor varsa testi patlatıyor
 
 
-def test_post_book_invalid_request(client):
+def test_put_book_invalid_request(client):
     new_book = {
         
     }
 
     response = client.simulate_put('/book', json=new_book)
-    assert response.status == falcon.HTTP_BAD_REQUEST
-    assert response.json['error'] == "Fields 'author' and 'title' are required"
+    assert response.status == falcon.HTTP_BAD_REQUEST #author ile title parametrelerini göndermediğim için bad request dönmesi lazım, dönmezse patlat
+    assert response.json['error'] == "Fields 'author' and 'title' are required" #dönen jsondaki error fieldı buna eşit değilse testi patlatır
 
 
-def test_post_book_empty_field(client): 
+def test_put_book_empty_field(client): 
     new_book = {
         "author": "Jack Nicholson",
         "title": ""
@@ -78,5 +79,5 @@ def test_put_existing_book(client):
     }
 
     response = client.simulate_put('/book', json=new_book)
-    assert response.status == falcon.HTTP_BAD_REQUEST 
+    assert response.status == falcon.HTTP_OK
     assert response.json['error'] == "Another book with similar title and author already exists."
